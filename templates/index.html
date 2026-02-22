@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard SI - Pablo Ruan</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --primary: #8b5cf6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --text: #f0f6fc;
+        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .container { max-width: 600px; width: 100%; }
+        h1 { color: var(--primary); text-shadow: 0 0 10px rgba(139, 92, 246, 0.3); }
+        .card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .btn { border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; color: white; width: 100%; }
+        .btn-feed { background: var(--secondary); }
+        .btn-feed:hover { background: #059669; transform: scale(1.02); }
+        .btn-water { background: #3b82f6; }
+        .btn-weight { background: var(--primary); margin-top: 10px; }
+        input { background: #0d1117; border: 1px solid #30363d; padding: 10px; border-radius: 6px; color: white; width: calc(100% - 24px); }
+        ul { list-style: none; padding: 0; }
+        li { background: #21262d; padding: 8px 12px; border-radius: 6px; margin-bottom: 5px; font-size: 0.9em; display: flex; justify-content: space-between; }
+        .time { color: #8b949e; font-size: 0.8em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 SI Control Panel</h1>
+        <p>Dev: Pablo Ruan (20 anos) | Aracaju-SE</p>
+
+        <div class="card">
+            <h2>🏋️ Projeto Bulking (Meta 57kg)</h2>
+            <p>Atual: <strong>{{ peso['peso'] if peso else 'N/A' }}kg</strong></p>
+            <p>Faltam: <span style="color: var(--accent)">{{ "%.1f"|format(falta) }}kg</span></p>
+            <form action="/registrar_peso" method="post">
+                <input type="number" step="0.1" name="peso" placeholder="Peso atual" required>
+                <button type="submit" class="btn btn-weight">Registrar Progresso</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>🐈 Cuidados com o Eren</h2>
+            <div class="status-grid">
+                <form action="/acao_eren" method="post">
+                    <input type="hidden" name="acao" value="Alimentado 🍗">
+                    <button type="submit" class="btn btn-feed">Dar Comida</button>
+                </form>
+                <form action="/acao_eren" method="post">
+                    <input type="hidden" name="acao" value="Água Trocada 💧">
+                    <button type="submit" class="btn btn-water">Trocar Água</button>
+                </form>
+            </div>
+            <h3 style="margin-top: 20px;">Últimas Atividades:</h3>
+            <ul>
+                {% for log in eren %}
+                <li>
+                    <span>{{ log['atividade'] }}</span>
+                    <span class="time">{{ log['data'] }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
